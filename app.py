@@ -301,4 +301,4 @@ def base64_decode(string):
     return base64.urlsafe_b64decode(string)
 
 if __name__ == '__main__':
-    api.run(port=os.getenv('PORT'))
+    api.run(port=os.getenv('PORT'), host="0.0.0.0")
