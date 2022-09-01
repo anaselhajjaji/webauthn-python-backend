@@ -1,4 +1,5 @@
 # Imports
+import os
 import base64
 from pydoc import cli
 from flask import Flask, json, request, jsonify
@@ -300,4 +301,4 @@ def base64_decode(string):
     return base64.urlsafe_b64decode(string)
 
 if __name__ == '__main__':
-    api.run(port=8081)
+    api.run(port=os.getenv('PORT'))
