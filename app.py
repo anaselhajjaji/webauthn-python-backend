@@ -2,7 +2,7 @@
 import os
 import base64
 from pydoc import cli
-from flask import Flask, json, request, jsonify
+from flask import Flask, json, request, jsonify, render_template
 from flask_cors import CORS, cross_origin
 from webauthn import (
     generate_registration_options,
