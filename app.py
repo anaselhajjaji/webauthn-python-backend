@@ -35,6 +35,10 @@ api = Flask(__name__,
 cors = CORS(api)
 api.config['CORS_HEADERS'] = 'Content-Type'
 
+@app.route("/")
+def index_page():
+    return render_template('index.html')
+
 ########################################################################
 #
 #  will be called by js: generateAuthOptionsFromBackend()
