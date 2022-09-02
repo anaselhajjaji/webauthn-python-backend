@@ -1,7 +1,8 @@
 # Imports
+import os
 import base64
 from pydoc import cli
-from flask import Flask, json, request, jsonify
+from flask import Flask, json, request, jsonify, render_template
 from flask_cors import CORS, cross_origin
 from webauthn import (
     generate_registration_options,
@@ -32,6 +33,10 @@ api = Flask(__name__)
 cors = CORS(api)
 api.config['CORS_HEADERS'] = 'Content-Type'
 
+@api.route("/")
+def index_page():
+    return render_template('index.html')
+
 ########################################################################
 #
 #  will be called by js: generateAuthOptionsFromBackend()
@@ -54,7 +59,7 @@ def generate_registration_opts():
     registration_options = generate_registration_options(
         # RP Options
         rp_id=get_expected_rpid(user_agent),
-        rp_name="RP On Localhost",
+        rp_name="RP On webauthn-python-backend.herokuapp.com",
         
         # User registration options: should be sent in the request
         user_id=user_id,
@@ -70,7 +75,7 @@ def generate_registration_opts():
         # authenticatorSelection
         authenticator_selection=AuthenticatorSelectionCriteria(
             authenticator_attachment=AuthenticatorAttachment.PLATFORM,
-            require_resident_key=True,
+            require_resident_key=False, # NOTE: not supported on Android Browser
             user_verification=UserVerificationRequirement.REQUIRED
         ),
         timeout=10000
@@ -263,7 +268,7 @@ def get_expected_rpid(req_user_agent):
         return "panoramic-warp-march.glitch.me"
     else:
         # request coming from browser
-        return "localhost" # To make the example work on localhost, otherwise it should be: something.com
+        return "webauthn-python-backend.herokuapp.com" # To make the example work on localhost, otherwise it should be: something.com
 
 def get_expected_origin(req_user_agent):
     """Will return expected rp id based on request user agent"""
@@ -273,7 +278,7 @@ def get_expected_origin(req_user_agent):
         return "android:apk-key-hash:26szkDefx71uYzplqvYgGay72X_EDCe89X1zon0eaMA"
     else:
         # request coming from browser
-        return "http://localhost"
+        return "https://webauthn-python-backend.herokuapp.com"
 
 def get_supported_algorithms(req_user_agent):
     """Will return supported algorithms based on request user agent"""
@@ -300,4 +305,4 @@ def base64_decode(string):
     return base64.urlsafe_b64decode(string)
 
 if __name__ == '__main__':
-    api.run(port=8081)
+    api.run(port=os.getenv('PORT'), host="0.0.0.0")

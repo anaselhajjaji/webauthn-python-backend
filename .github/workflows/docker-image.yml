@@ -1,0 +1,30 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Build the Docker image
+      run: docker build -t ${GITHUB_REPOSITORY}:${{ github.run_number }} -t ${GITHUB_REPOSITORY}:latest .
+    - name: Deploy to Heroku
+      if: success()
+      uses: AkhileshNS/heroku-deploy@v3.0.4
+      with:
+        # This will be used for authentication. You can find it in your heroku homepage account settings
+        heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
+        # Email that you use with heroku
+        heroku_email: elhajjaji.anas@gmail.com
+        # The appname to use for deploying/updating
+        heroku_app_name: webauthn-python-backend
+        # Will deploy using Dockerfile in project root.
+        usedocker: true

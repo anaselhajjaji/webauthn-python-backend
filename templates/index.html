@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>Webauthn Basic Getting-started: Flow Example</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script type="text/javascript" src="https://unpkg.com/cbor-redux@0.3.1/es5/CBOR.js"></script>
+<script src="/static/webauthn.js"></script>
+<script src="/static/webauthn-backend-overrides.js"></script>
+<style>
+body {
+  font-family: Arial, Helvetica, sans-serif;
+}
+</style>
+</head>
+<body>
+
+<h1>Webauthn Basic Getting-started: Flow Example</h1>
+
+<h2>Step 1: Fill in the user ID before register/authenticate</h2>
+<label for="userId">User ID:</label>
+<input type="text" id="userId" name="userId">
+
+<h2>Step 2: Register, create and validate the credentials</h2>
+<h3>In this step, the server will create a new credential by calling navigator.credentials.create() on the client side</h3>
+<input id="create-cred" type="button" value="1. Register: create and validate credentials" onclick="registerCredentials();" />
+<div style="color:#12531e;border-style: solid;" id="credential"></div>
+
+<h2>Step 3: Authentication</h2>
+<h3>After registration has finished, the user can now be authenticated. During authentication an assertion is created, 
+  which is proof that the user has possession of the private key. This assertion contains a signature created using the private key. 
+  The server uses the public key retrieved during registration to verify this signature.</h3>
+<input id="authenticate" type="button" value="2. Authenticate" onclick="authenticate();" />
+<div style="color:#12531e;border-style: solid;" id="authResult"></div>
+</body>
+</html>

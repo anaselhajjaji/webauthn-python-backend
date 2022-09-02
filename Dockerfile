@@ -9,4 +9,4 @@ COPY . .
 
 CMD [ "python", "app.py"]
 
-EXPOSE 8081
+EXPOSE $PORT
