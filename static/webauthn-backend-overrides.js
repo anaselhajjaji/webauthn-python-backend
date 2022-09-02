@@ -7,7 +7,7 @@ generateRegistrationOptionsFromBackend = async function () {
     alert("Please fill in the user id.");
   }
   else {
-    let data = await fetch(`http://localhost:8081/generate_registration_opts?userId=${userId}`)
+    let data = await fetch(`https://webauthn-python-backend.herokuapp.com/generate_registration_opts?userId=${userId}`)
       .then((response) => response.json())
       .then((data) => {
         // Create needs byte array instead in base64 json version
@@ -58,7 +58,7 @@ parseAndValidateCredentialOnBackend = async function (cred) {
       'X-Requested-With': 'XMLHttpRequest',
     };
     headers['Content-Type'] = 'application/json';
-    const res = await fetch(`http://localhost:8081/verify_registration?userId=${userId}`, {
+    const res = await fetch(`https://webauthn-python-backend.herokuapp.com/verify_registration?userId=${userId}`, {
       method: 'POST',
       credentials: 'same-origin',
       headers: headers,
@@ -93,7 +93,7 @@ generateAuthOptionsFromBackend = async function (credentialId) {
   }
   else {
 
-    let data = await fetch(`http://localhost:8081/generate_authentication_opts?userId=${userId}`)  //encodeURIComponent(credentialId)
+    let data = await fetch(`https://webauthn-python-backend.herokuapp.com/generate_authentication_opts?userId=${userId}`)  //encodeURIComponent(credentialId)
       .then((response) => response.json())
       .then((data) => {
         // Create needs byte array instead in base64 json version
@@ -145,7 +145,7 @@ parseAndValidateAssertionOnBackend = async function (cred) {
       'X-Requested-With': 'XMLHttpRequest',
     };
     headers['Content-Type'] = 'application/json';
-    const res = await fetch(`http://localhost:8081/verify_authentication?userId=${userId}`, {
+    const res = await fetch(`https://webauthn-python-backend.herokuapp.com/verify_authentication?userId=${userId}`, {
       method: 'POST',
       credentials: 'same-origin',
       headers: headers,

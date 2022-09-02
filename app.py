@@ -59,7 +59,7 @@ def generate_registration_opts():
     registration_options = generate_registration_options(
         # RP Options
         rp_id=get_expected_rpid(user_agent),
-        rp_name="RP On Localhost",
+        rp_name="RP On webauthn-python-backend.herokuapp.com",
         
         # User registration options: should be sent in the request
         user_id=user_id,
@@ -268,7 +268,7 @@ def get_expected_rpid(req_user_agent):
         return "panoramic-warp-march.glitch.me"
     else:
         # request coming from browser
-        return "localhost" # To make the example work on localhost, otherwise it should be: something.com
+        return "webauthn-python-backend.herokuapp.com" # To make the example work on localhost, otherwise it should be: something.com
 
 def get_expected_origin(req_user_agent):
     """Will return expected rp id based on request user agent"""
@@ -278,7 +278,7 @@ def get_expected_origin(req_user_agent):
         return "android:apk-key-hash:26szkDefx71uYzplqvYgGay72X_EDCe89X1zon0eaMA"
     else:
         # request coming from browser
-        return "http://localhost"
+        return "https://webauthn-python-backend.herokuapp.com"
 
 def get_supported_algorithms(req_user_agent):
     """Will return supported algorithms based on request user agent"""
