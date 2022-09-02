@@ -2,18 +2,24 @@
 // In this step, the server will create a new credential by calling navigator.credentials.create() on the client side
 async function registerCredentials() {
 
-    // CREATE CREDENTIALS
-    console.log("STEP 1: Register, create and validate the credentials");
-    const publicKeyCredentialCreationOptions = await generateRegistrationOptionsFromBackend();
-    
-    console.log('-------- publicKeyCredentialCreationOptions', publicKeyCredentialCreationOptions);
+    try {
 
-    const credential = await navigator.credentials.create({
-        publicKey: publicKeyCredentialCreationOptions
-    });
+        // CREATE CREDENTIALS
+        console.log("STEP 1: Register, create and validate the credentials");
+        const publicKeyCredentialCreationOptions = await generateRegistrationOptionsFromBackend();
+        
+        console.log('-------- publicKeyCredentialCreationOptions', publicKeyCredentialCreationOptions);
 
-    // PARSING AND VALIDATING THE REGISTRATION DATA
-    parseAndValidateCredentialOnBackend(credential);
+        const credential = await navigator.credentials.create({
+            publicKey: publicKeyCredentialCreationOptions
+        });
+
+        // PARSING AND VALIDATING THE REGISTRATION DATA
+        parseAndValidateCredentialOnBackend(credential);
+
+    } catch (e) {
+        alert(e);
+    } 
 }
 
 async function generateRegistrationOptionsFromBackend() {
@@ -239,19 +245,24 @@ function parseAndValidateCredentialOnBackend(credential) {
 // private key.
 // The server uses the public key retrieved during registration to verify this signature.
 async function authenticate() {
-    console.log("STEP 2: Authentication");
-    
-    const credentialId = localStorage.getItem('credId');
-    console.log('credential id', credentialId);
+    try {
+        console.log("STEP 2: Authentication");
+        
+        const credentialId = localStorage.getItem('credId');
+        console.log('credential id', credentialId);
 
-    const publicKeyCredentialRequestOptions = await generateAuthOptionsFromBackend(credentialId);
+        const publicKeyCredentialRequestOptions = await generateAuthOptionsFromBackend(credentialId);
 
-    console.log("-------- publicKeyCredentialRequestOptions", publicKeyCredentialRequestOptions);
-    const assertion = await navigator.credentials.get({
-        publicKey: publicKeyCredentialRequestOptions
-    });
+        console.log("-------- publicKeyCredentialRequestOptions", publicKeyCredentialRequestOptions);
+        const assertion = await navigator.credentials.get({
+            publicKey: publicKeyCredentialRequestOptions
+        });
 
-    parseAndValidateAssertionOnBackend(assertion);
+        parseAndValidateAssertionOnBackend(assertion);
+
+    } catch (e) {
+        alert(e);
+    }
 }
 
 async function generateAuthOptionsFromBackend(credentialId) {
