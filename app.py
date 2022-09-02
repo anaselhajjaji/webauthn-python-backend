@@ -293,7 +293,7 @@ def get_supported_algorithms(req_user_agent):
         # request coming from browser
         return [
             COSEAlgorithmIdentifier.ECDSA_SHA_256,
-            #COSEAlgorithmIdentifier.EDDSA # NOTE: not supported on Android Browser
+            COSEAlgorithmIdentifier.EDDSA
         ]
 
 def base64_decode(string):
