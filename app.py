@@ -29,9 +29,7 @@ import pickledb
 
 db = pickledb.load('webauthn.db', False)
 
-api = Flask(__name__,
-            static_url_path='', 
-            static_folder='web/static',)
+api = Flask(__name__)
 cors = CORS(api)
 api.config['CORS_HEADERS'] = 'Content-Type'
 
