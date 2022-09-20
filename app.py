@@ -12,11 +12,14 @@ from webauthn import (
     options_to_json
 )
 from webauthn.helpers import (
+    base64url_to_bytes,
     parse_client_data_json,
     parse_attestation_object
 )
+from webauthn.helpers.exceptions import InvalidRegistrationResponse
 from webauthn.helpers.cose import COSEAlgorithmIdentifier
 from webauthn.helpers.structs import (
+    AttestationFormat,
     AttestationConveyancePreference,
     AuthenticatorAttachment,
     AuthenticatorSelectionCriteria,
@@ -25,6 +28,7 @@ from webauthn.helpers.structs import (
     UserVerificationRequirement,
     AuthenticationCredential,
 )
+from webauthn.registration.formats.android_safetynet import SafetyNetJWSPayload
 import pickledb
 
 db = pickledb.load('webauthn.db', False)
@@ -129,6 +133,25 @@ def verify_registration():
     print("------------------ attestation_object")
     attestation_object=parse_attestation_object(parsed_cred.response.attestation_object)
     print(attestation_object)
+    
+    # SPECIFIC PARSING OF ANDROID SAFETYNET
+    if (attestation_object.fmt == AttestationFormat.ANDROID_SAFETYNET):
+        print("AttestationFormat.ANDROID_SAFETYNET CONTENT")
+        jws = attestation_object.att_stmt.response.decode("ascii")
+        jws_parts = jws.split(".")
+        if len(jws_parts) != 3:
+            raise InvalidRegistrationResponse(
+                "Response JWS did not have three parts (SafetyNet)"
+            )
+        payload_bytes=base64url_to_bytes(jws_parts[1])
+        payload=SafetyNetJWSPayload.parse_raw(payload_bytes)
+        payload_json=payload_bytes.decode("utf-8")
+        print("PAYLOAD JSON")
+        print(payload_json)
+        print("ctsProfileMatch: A stricter verdict of device integrity. If the value of ctsProfileMatch is true, then the profile of the device running your app matches the profile of a device that has passed Android compatibility testing and has been approved as a Google-certified Android device.")
+        print("VALUE = " + str(payload.cts_profile_match))
+        print("basicIntegrity: A more lenient verdict of device integrity. If only the value of basicIntegrity is true, then the device running your app likely wasn't tampered with. However, the device hasn't necessarily passed Android compatibility testing.")
+        print("VALUE = " + str(payload.basic_integrity))
     
     # Gets challenge from sesssion
     expected_challenge=db.get('challenge')
