@@ -266,12 +266,14 @@ def verify_authentication():
     print("------------------ parsed authenticator_data size")
     auth_data = parse_authenticator_data(parsed_assertion.response.authenticator_data)
     print(auth_data)
-
+    
     # Gets challenge from sesssion
     expected_challenge=db.get('challenge')
     
     # retrieves saved public key
     public_key=db.get(parsed_assertion.id)
+    print("------------------ public key size")
+    print(len(public_key))
 
     authentication_verification = verify_authentication_response(
         credential=parsed_assertion,
