@@ -14,7 +14,8 @@ from webauthn import (
 from webauthn.helpers import (
     base64url_to_bytes,
     parse_client_data_json,
-    parse_attestation_object
+    parse_attestation_object,
+    parse_authenticator_data
 )
 from webauthn.helpers.exceptions import InvalidRegistrationResponse
 from webauthn.helpers.cose import COSEAlgorithmIdentifier
@@ -256,6 +257,15 @@ def verify_authentication():
     # Example to parse client data json
     client_data_json=parse_client_data_json(parsed_assertion.response.client_data_json)
     print(client_data_json)
+
+    # Print some values
+    print("------------------ signature size")
+    print(len(parsed_assertion.response.signature))
+    print("------------------ authenticator_data size")
+    print(len(parsed_assertion.response.authenticator_data))
+    print("------------------ parsed authenticator_data size")
+    auth_data = parse_authenticator_data(parsed_assertion.response.authenticator_data)
+    print(auth_data)
 
     # Gets challenge from sesssion
     expected_challenge=db.get('challenge')
