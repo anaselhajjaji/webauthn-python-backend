@@ -81,7 +81,7 @@ def generate_registration_opts():
         authenticator_selection=AuthenticatorSelectionCriteria(
             authenticator_attachment=AuthenticatorAttachment.PLATFORM,
             require_resident_key=False, # NOTE: not supported on Android Browser
-            user_verification=UserVerificationRequirement.REQUIRED
+            user_verification=UserVerificationRequirement.DISCOURAGED
         ),
         timeout=10000
     )
