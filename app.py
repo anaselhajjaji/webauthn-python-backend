@@ -81,9 +81,9 @@ def generate_registration_opts():
         authenticator_selection=AuthenticatorSelectionCriteria(
             authenticator_attachment=AuthenticatorAttachment.PLATFORM,
             require_resident_key=False, # NOTE: not supported on Android Browser
-            user_verification=UserVerificationRequirement.DISCOURAGED
+            user_verification=UserVerificationRequirement.PREFERRED
         ),
-        timeout=10000
+        timeout=10000,
     )
 
     # Save challenge in session (should use session way to handle that)
